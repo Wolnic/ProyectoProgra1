@@ -197,108 +197,46 @@ import javax.swing.JTextField;
     } while (opcion != 2);
 }
 
-    private static void gestionarEventos() {
-        Evento[] eventos = {
-            new Evento("tour por el zoologico ", "Tour de bienvenida ", 1, "10-09-2024.", "puerta pruncipal"),
-            new Evento("charla con expertos  ", "Charla con Juan Perez Biologo", 2, "1-10-2024", "salon de eventos"),
-            new Evento("taller de manualidades", "taller sobre carpienteria ", 3, "2-11-2024", "salon de eventos")
-        };
-        int numEventos = 3; // Cantidad de eventos precargados
-        String[] opciones = {"Agregar evento", "Ver eventos", "Modificar evento", "Eliminar evento", "Regresar"};
-        int opcion = -1;
+       private static void gestionarEventos() {
+    GestionEventos gestionEventos = new GestionEventos(); // Cambiado a "gestionEventos" para coincidir con el uso posterior
+    String[] opciones = {"Agregar Evento", "Consultar Eventos", "Modificar Evento", "Eliminar Evento", "Volver al Menú Principal"};
+    int opcion;
 
-        while (opcion != 4) { // "Volvemos al menu inicial "
-            opcion = JOptionPane.showOptionDialog(
-                    null,
-                    "Seleccione una opcion:",
-                    "Gestion de Eventos",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    opciones,
-                    opciones[0]
-            );
+    do {
+        // Mostramos un menú al usuario y le pedimos que seleccione una opción
+        opcion = JOptionPane.showOptionDialog(null, "***MENÚ DE EVENTOS***", "Sistema de Gestión de Eventos",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
-            switch (opcion) {
-                case 0: // Agregar Evento
-                    if (numEventos < eventos.length) {
-                        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del evento:");
-                        String fecha = JOptionPane.showInputDialog("Ingrese la fecha del evento (dd-mm-yyyy):");
-                        int id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del evento:"));
-                        String descripcion = JOptionPane.showInputDialog("Ingrese la descripcion del evento:");
-                        String localizacion = JOptionPane.showInputDialog("Ingrese la localizacion del evento:");
-                        eventos[numEventos++] = new Evento(nombre, fecha, id, descripcion, localizacion);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Se ha alcanzado el limite maximo de eventos.");
-                    }
-                    break;
-                case 1: // Ver Eventos
-                    if (numEventos > 0) {
-                        StringBuilder eventosList = new StringBuilder();
-                        for (int i = 0; i < numEventos; i++) {
-                            eventosList.append("Evento ID: ").append(eventos[i].getId()).append("\n")
-                                    .append("Nombre: ").append(eventos[i].getNombre()).append("\n")
-                                    .append("Fecha: ").append(eventos[i].getFecha()).append("\n")
-                                    .append("Descripción: ").append(eventos[i].getDescripcion()).append("\n")
-                                    .append("Localización: ").append(eventos[i].getLocalizacion()).append("\n\n");
-                        }
-                        JOptionPane.showMessageDialog(null, eventosList.toString());
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No hay eventos registrados.");
-                    }
-                    break;
-                case 2: // Modificar Evento
-                    int idModificar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del evento a modificar:"));
-                    boolean encontrado = false;
-                    for (int i = 0; i < numEventos; i++) {
-                        if (eventos[i].getId() == idModificar) {
-                            String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre del evento:");
-                            String nuevaFecha = JOptionPane.showInputDialog("Ingrese la nueva fecha del evento (YYYY-MM-DD):");
-                            String nuevaDescripcion = JOptionPane.showInputDialog("Ingrese la nueva descripción del evento:");
-                            String nuevaLocalizacion = JOptionPane.showInputDialog("Ingrese la nueva localización del evento:");
-
-                            eventos[i].setNombre(nuevoNombre);
-                            eventos[i].setFecha(nuevaFecha);
-                            eventos[i].setDescripcion(nuevaDescripcion);
-                            eventos[i].setLocalizacion(nuevaLocalizacion);
-
-                            encontrado = true;
-                            JOptionPane.showMessageDialog(null, "Evento modificado con éxito.");
-                            break;
-                        }
-                    }
-                    if (!encontrado) {
-                        JOptionPane.showMessageDialog(null, "No se encontró ningún evento con ese ID.");
-                    }
-                    break;
-                case 3: // Eliminar Evento
-                    int idEliminar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del evento a eliminar:"));
-                    encontrado = false;
-                    for (int i = 0; i < numEventos; i++) {
-                        if (eventos[i].getId() == idEliminar) {
-                            for (int j = i; j < numEventos - 1; j++) {
-                                eventos[j] = eventos[j + 1];
-                            }
-                            eventos[--numEventos] = null;
-                            encontrado = true;
-                            JOptionPane.showMessageDialog(null, "Evento eliminado con éxito.");
-                            break;
-                        }
-                    }
-                    if (!encontrado) {
-                        JOptionPane.showMessageDialog(null, "No se encontró ningún evento con ese ID.");
-                    }
-                    break;
-                case 4: // Volver
-                    JOptionPane.showMessageDialog(null, "Volviendo al menú principal.");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Opción invalida. Por favor, intente de nuevo.");
-                    break;
-            }
+        // Usamos un switch para manejar la opción seleccionada por el usuario
+        switch (opcion) {
+            case 0:
+                // Si el usuario selecciona "0", llamamos al método para agregar un nuevo evento
+                gestionEventos.agregarEvento(); // Corrección del nombre de variable
+                break;
+            case 1:
+                // Si el usuario selecciona "1", llamamos al método para consultar todos los eventos
+                gestionEventos.consultarEvento(); // Corrección del nombre de método
+                break;
+            case 2:
+                // Si el usuario selecciona "2", llamamos al método para modificar un evento existente
+                gestionEventos.modificarEvento(); // Corrección del nombre de método
+                break;
+            case 3:
+                // Si el usuario selecciona "3", llamamos al método para eliminar un evento
+                gestionEventos.eliminarEvento(); // Corrección del nombre de método
+                break;
+            case 4:
+                // Si el usuario selecciona "4", volvemos al menú principal
+                return; // Salimos del método para regresar al menú principal
+            default:
+                // Este caso no debería ser necesario, pero se incluye por seguridad
+                JOptionPane.showMessageDialog(null, "Opción no válida. Intente de nuevo.");
+                break;
         }
-    }
+    } while (opcion != 4);
+}
 
+ 
     private static void registrarAnimales() {
     GestionAnimales2 gestionAnimales = new GestionAnimales2();
     String[] opciones = {"Agregar Animal", "Consultar Animal", "Eliminar Animal", "Modificar Animal", "Volver al Menú Principal"};
